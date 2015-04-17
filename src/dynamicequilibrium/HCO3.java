@@ -15,7 +15,7 @@ import java.awt.Color;
 public class HCO3 extends Particle{
     
     public HCO3(double x, double y){
-        super(x, y, 20, new Color(0, 200, 0), "HCO3");
+        super(x, y, 10, new Color(0, 200, 0), "HCO3");
         
     }
     
