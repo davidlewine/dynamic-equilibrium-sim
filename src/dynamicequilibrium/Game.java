@@ -26,6 +26,7 @@ public class Game extends JFrame implements WindowListener
   private JTextField c6h8o7Data;  // displays number of H ions
   private JTextField h2oData;  // displays number of H ions
   private JTextField naData;  // displays number of H ions
+  private JTextField clData;  // displays number of H ions
 
 
   public Game(int period)
@@ -65,6 +66,10 @@ public class Game extends JFrame implements WindowListener
     hclData.setEditable(false);
     ctrls.add(hclData);
     
+    clData = new JTextField("cl: 0 ");
+    clData.setEditable(false);
+    ctrls.add(clData);
+    
     hco3Data = new JTextField("HCO3: 0 ");
     hco3Data.setEditable(false);
     ctrls.add(hco3Data);
@@ -84,6 +89,8 @@ public class Game extends JFrame implements WindowListener
     naData = new JTextField("na: 0 ");
     naData.setEditable(false);
     ctrls.add(naData);
+    
+    
 
     c.add(ctrls, "South");
   }  // end of makeGUI()
@@ -100,6 +107,9 @@ public class Game extends JFrame implements WindowListener
   
   public void sethcl(int n)
   {  hclData.setText("HCl: " + n); }
+  
+  public void setcl(int n)
+  {  clData.setText("Cl: " + n); }
   
   public void sethco3(int n)
   {  hco3Data.setText("HCO3: " + n); }
