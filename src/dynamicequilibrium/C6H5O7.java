@@ -9,7 +9,7 @@ import java.awt.Color;
 public class C6H5O7 extends Particle{
     
     public C6H5O7(double x, double y){
-        super(x, y, 20, new Color(0, 0, 200), "C6H5O7");
+        super(x, y, 20, new Color(100, 0, 100), "C6H5O7");
     }
     
 }

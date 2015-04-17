@@ -8,15 +8,15 @@ import java.util.ArrayList;
  *
  * @author David
  */
-public class C6H8O7 extends Particle{
+public class C6H7O7 extends Particle{
     
-    public C6H8O7(double x, double y){
-        super(x, y, 20, new Color(200, 0, 200), "C6H8O7");
+    public C6H7O7(double x, double y){
+        super(x, y, 20, new Color(200, 0, 200), "C6H7O7");
     }
     @Override
     public void display(Graphics g){
         //System.out.println(charge);
-        c = new Color(250, 0, 250);
+        c = new Color(150, 0, 150);
         g.setColor(c);
         g.fillOval((int)pos.x(), (int)pos.y(), (int)r, (int)r);
     }
@@ -25,7 +25,7 @@ public class C6H8O7 extends Particle{
         ArrayList<Particle> products = new ArrayList();
             if (Math.random() > .992) {
                 products.add(new H(pos.x(), Math.max(pos.y() - 1*r, 0)));
-                products.add(new C6H7O7(Math.max(pos.x() - 1 * r, 0), pos.y()));
+                products.add(new C6H6O7(Math.max(pos.x() - 1 * r, 0), pos.y()));
             }
         return products;
     }
