@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
     private int period;                // period between drawing in _ms_
 
     private Game game;
-    public DynamicEquilibrium dynEq;
+    public Engine engine;
 
     // used at game termination
     private volatile boolean gameOver = false;
@@ -64,8 +64,10 @@ public class GamePanel extends JPanel implements Runnable {
     // off screen rendering
     private Graphics dbg;
     private Image dbImage = null;
+    private int skipCounter = 0;
+    private int maxSkips = 10;
 
-    public GamePanel(Game g, int period) {
+    public GamePanel(Game g, Engine engineArg, int period) {
         game = g;
         this.period = period;
 
@@ -76,11 +78,12 @@ public class GamePanel extends JPanel implements Runnable {
         requestFocus();    // the JPanel now has focus, so receives key events
         readyForTermination();
 
-        dynEq = new DynamicEquilibrium(PWIDTH, PHEIGHT);
+        engine = engineArg;
+        System.out.println("engine" + engine);
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                testPress(e.getX(), e.getY());
+
             }
         });
 
@@ -124,6 +127,7 @@ public class GamePanel extends JPanel implements Runnable {
             animator = new Thread(this);
             animator.start();
         }
+        game.gui = new Gui(game, engine, period);
     } // end of startGame()
 
   // ------------- game life cycle methods ------------
@@ -143,11 +147,7 @@ public class GamePanel extends JPanel implements Runnable {
         running = false;
     }
 
-  // ----------------------------------------------
-    private void testPress(int x, int y) // is (x,y) near the head or should an obstacle be added?
-    {
-        System.out.println("testPress");
-    }  // end of testPress()
+  
 
     public void run() /* The frames of the animation are drawn inside the while loop. */ {
         long beforeTime, afterTime, timeDiff, sleepTime;
@@ -165,6 +165,15 @@ public class GamePanel extends JPanel implements Runnable {
         while (running) {
             gameUpdate();
             gameRender();   // render the game to a buffer
+            if(skipCounter == maxSkips){
+                game.guiUpdate();
+            game.guiRender();
+                skipCounter = 0;
+            }
+             else{
+                skipCounter++;
+            }
+            
             paintScreen();  // draw the buffer on-screen
 
             afterTime = System.currentTimeMillis();
@@ -209,16 +218,16 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void gameUpdate() {
         if (!isPaused && !gameOver) {
-            dynEq.update();
+            engine.update();
         }
-        game.seth(dynEq.hList.size());
-        game.sethcl(dynEq.hclList.size());
-        game.sethco3(dynEq.hco3List.size());
-        game.setnahco3(dynEq.nahco3List.size());
-        game.setc6h8o7(dynEq.c6h8o7List.size() + dynEq.c6h7o7List.size() + dynEq.c6h6o7List.size() + dynEq.c6h5o7List.size());
-        game.seth2o(dynEq.h2oList.size());
-        game.setna(dynEq.naList.size());
-        game.setcl(dynEq.clList.size());
+        game.seth(engine.hList.size());
+        game.sethcl(engine.hclList.size());
+        game.sethco3(engine.hco3List.size());
+        game.setnahco3(engine.nahco3List.size());
+        game.setc6h8o7(engine.c6h8o7List.size() + engine.c6h7o7List.size() + engine.c6h6o7List.size() + engine.c6h5o7List.size());
+        game.seth2o(engine.h2oList.size());
+        game.setna(engine.naList.size());
+        game.setcl(engine.clList.size());
 
     }  // end of gameUpdate()
 
@@ -248,7 +257,7 @@ public class GamePanel extends JPanel implements Runnable {
         dbg.setColor(Color.black);
 
     // draw game elements: the obstacles and the worm
-        dynEq.draw(dbg);
+        engine.draw(dbg);
 
         if (gameOver) {
             gameOverMessage(dbg);

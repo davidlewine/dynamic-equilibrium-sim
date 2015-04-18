@@ -11,7 +11,6 @@ public class Na extends Particle{
     
     public Na(double x, double y){
         super(x, y, 20, new Color(200, 200, 0), "Na");
-        System.out.println("vel: " + vel.x() + " " + vel.y());
     }
     
     public ArrayList<Particle> react(Particle p){

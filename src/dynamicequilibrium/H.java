@@ -20,7 +20,7 @@ public class H extends Particle{
     public ArrayList<Particle> react(Particle p){
         ArrayList<Particle> products = new ArrayList();
         if(p.formula.equals("Cl")){
-            if (Math.random() > .9993) {
+            if (Math.random() > .997) {
                     products.add(new HCl(pos.x(), pos.y()));
                 }
         }

@@ -15,7 +15,8 @@ import java.awt.event.*;
 public class Game extends JFrame implements WindowListener
 {
   private static int DEFAULT_FPS = 60;
-
+  private int width = 800;
+  private int height = 600;
   private GamePanel gp;        // where the worm is drawn
   private JTextField jtfBox;   // displays no.of boxes used
   private JTextField jtfTime;  // displays time spent in game
@@ -27,11 +28,15 @@ public class Game extends JFrame implements WindowListener
   private JTextField h2oData;  // displays number of H ions
   private JTextField naData;  // displays number of H ions
   private JTextField clData;  // displays number of H ions
+  public Engine engine;
+  public Gui gui;
 
 
   public Game(int period)
   { super("Dynamic Equilibrium");
-    makeGUI(period);
+    engine = new Engine(width, height);
+    makeGamePanel(period);
+    
 
     addWindowListener( this );
     pack();
@@ -40,11 +45,11 @@ public class Game extends JFrame implements WindowListener
   }  // end of WormChase() constructor
 
 
-  private void makeGUI(int period)
+  private void makeGamePanel(int period)
   {
     Container c = getContentPane();    // default BorderLayout used
 
-    gp = new GamePanel(this, period);
+    gp = new GamePanel(this, engine, period);
     c.add(gp, "Center");
 
     JPanel ctrls = new JPanel();   // a row of textfields
@@ -98,6 +103,13 @@ public class Game extends JFrame implements WindowListener
 
 //  public void setBoxNumber(int no)
 //  {  jtfBox.setText("Boxes used: " + no);  }
+  
+  public void guiUpdate(){
+      gui.update();
+  }
+  public void guiRender(){
+      gui.render();
+  }
 
   public void setTimeSpent(long t)
   {  jtfTime.setText("timeSpent: " + t + " secs"); }

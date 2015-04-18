@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 
 import math.geom2d.*;
 
-public class DynamicEquilibrium extends JPanel {
+public class Engine extends JPanel {
 
     ArrayList<Particle> particles = new ArrayList();
     ArrayList<Particle> hList = new ArrayList();
@@ -37,7 +37,7 @@ public class DynamicEquilibrium extends JPanel {
     double atomRad;
     Bins bins;
 
-    public DynamicEquilibrium(int w, int h) {
+    public Engine(int w, int h) {
         width = w;
         height = h;
         bins = new Bins(w, h);
@@ -53,13 +53,13 @@ public class DynamicEquilibrium extends JPanel {
         particleLists.put("Cl", clList);
         particleLists.put("H", hList);
         
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i <500; i++) {
             Particle tempParticle = new HCl(Math.random() * width, Math.random() * height);
             //particles.add(tempParticle);
             hclList.add(tempParticle);
             bins.add(tempParticle);
         }
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 0; i++) {
             Particle tempParticle = new NaHCO3(Math.random() * width, Math.random() * height);
             //particles.add(tempParticle);
             nahco3List.add(tempParticle);
@@ -176,9 +176,9 @@ public class DynamicEquilibrium extends JPanel {
 //        for (Particle p : nahco3List) {
 //            p.display(g);
 //        }
-//        for (Particle p : hclList) {
-//            p.display(g);
-//        }
+        for (Particle p : hclList) {
+            p.display(g);
+        }
         for (Particle p : hList) {
             p.display(g);
         }
