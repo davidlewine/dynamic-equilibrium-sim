@@ -83,6 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
+                System.out.println("gp pressed");
 
             }
         });
@@ -166,8 +167,6 @@ public class GamePanel extends JPanel implements Runnable {
             gameUpdate();
             gameRender();   // render the game to a buffer
             if(skipCounter == maxSkips){
-                game.guiUpdate();
-            game.guiRender();
                 skipCounter = 0;
             }
              else{
@@ -228,6 +227,7 @@ public class GamePanel extends JPanel implements Runnable {
         game.seth2o(engine.h2oList.size());
         game.setna(engine.naList.size());
         game.setcl(engine.clList.size());
+        game.guiUpdate();
 
     }  // end of gameUpdate()
 
@@ -258,6 +258,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // draw game elements: the obstacles and the worm
         engine.draw(dbg);
+        game.guiRender();
 
         if (gameOver) {
             gameOverMessage(dbg);
@@ -308,7 +309,7 @@ public class GamePanel extends JPanel implements Runnable {
         frameCount++;
         statsInterval += period;
 
-        if (statsInterval >= MAX_STATS_INTERVAL) {     // record stats every MAX_STATS_INTERVAL
+        if (statsInterval >= MAX_STATS_INTERVAL) {// record stats every MAX_STATS_INTERVAL
             long timeNow = System.currentTimeMillis();
             timeSpentInGame = ((timeNow - gameStartTime) / 1000L);  // ms --> secs
             game.setTimeSpent(timeSpentInGame);
@@ -369,5 +370,12 @@ public class GamePanel extends JPanel implements Runnable {
         System.out.println("Average UPS: " + df.format(averageUPS));
         System.out.println("Time Spent: " + timeSpentInGame + " secs");
     }  // end of printStats()
+    
+    public void setPeriod(int p){
+        period = p;
+    }
+    public int getPeriod(){
+        return period;
+    }
 
-}  // end of WormPanel class
+}  // end of GamePanel class

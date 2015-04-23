@@ -32,7 +32,7 @@ public class Gui extends JFrame implements WindowListener {
   private JTextField clData;  // displays number of H ions
   private Game game;
   private Engine engine;
-
+  
   public Gui(Game g, Engine e, int period){
     super("GUI");
     game = g;
@@ -43,6 +43,7 @@ public class Gui extends JFrame implements WindowListener {
     pack();
     setResizable(false);
     setVisible(true);
+    
   }  // end of WormChase() constructor
 
 

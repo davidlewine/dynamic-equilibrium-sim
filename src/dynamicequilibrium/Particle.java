@@ -13,6 +13,7 @@ package dynamicequilibrium;
 
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Font;
 import math.geom2d.*;
 import java.util.*;
 
@@ -25,6 +26,7 @@ public class Particle{
     public String formula;
     public int charge = 0;
     public int[] bin = {0,0};
+    public Font particleFont;
 
     
     public Particle(double x, double y, double rr, Color cc, String f){
@@ -33,6 +35,7 @@ public class Particle{
         c = cc;
         vel = new Vector2D(Math.random()/rate - .5/rate, Math.random()/rate - .5/rate);
         formula = f;
+        particleFont = new Font("TimesRoman", Font.PLAIN, 10); 
     }
     
     
@@ -51,7 +54,10 @@ public class Particle{
     
     public void display(Graphics g){
         g.setColor(c);
-        g.fillOval((int)pos.x(), (int)pos.y(), (int)r, (int)r);
+        g.setFont(particleFont);
+        //g.fillOval((int)pos.x(), (int)pos.y(), (int)r, (int)r);
+      
+        g.drawString(formula, (int)pos.x(), (int)pos.y());
     }
     
 }

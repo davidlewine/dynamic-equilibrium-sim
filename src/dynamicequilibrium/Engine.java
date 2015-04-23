@@ -53,7 +53,7 @@ public class Engine extends JPanel {
         particleLists.put("Cl", clList);
         particleLists.put("H", hList);
         
-        for (int i = 0; i <500; i++) {
+        for (int i = 0; i <0; i++) {
             Particle tempParticle = new HCl(Math.random() * width, Math.random() * height);
             //particles.add(tempParticle);
             hclList.add(tempParticle);
@@ -70,6 +70,66 @@ public class Engine extends JPanel {
             //particles.add(tempParticle);
             c6h8o7List.add(tempParticle);
             bins.add(tempParticle);
+        }
+    }
+    
+    public void addParticles(String s, int numPs){
+        int numParticles = numPs;
+        if(s.equals("HCl")){
+            for (int i = 0; i <numParticles; i++) {
+                Particle tempParticle = new HCl(Math.random() * width, Math.random() * height);
+                //particles.add(tempParticle);
+                hclList.add(tempParticle);
+                bins.add(tempParticle);
+            }
+        }
+        if(s.equals("H")){
+            for (int i = 0; i <numParticles; i++) {
+                Particle tempParticle = new H(Math.random() * width, Math.random() * height);
+                //particles.add(tempParticle);
+                hList.add(tempParticle);
+                bins.add(tempParticle);
+            }
+        }
+        if(s.equals("Cl")){
+            for (int i = 0; i <numParticles; i++) {
+                Particle tempParticle = new Cl(Math.random() * width, Math.random() * height);
+                //particles.add(tempParticle);
+                clList.add(tempParticle);
+                bins.add(tempParticle);
+            }
+        }
+        if(s.equals("NaHCO3")){
+            for (int i = 0; i <numParticles; i++) {
+                Particle tempParticle = new NaHCO3(Math.random() * width, Math.random() * height);
+                //particles.add(tempParticle);
+                nahco3List.add(tempParticle);
+                bins.add(tempParticle);
+            }
+        }
+        if(s.equals("HCO3")){
+            for (int i = 0; i <numParticles; i++) {
+                Particle tempParticle = new HCO3(Math.random() * width, Math.random() * height);
+                //particles.add(tempParticle);
+                hco3List.add(tempParticle);
+                bins.add(tempParticle);
+            }
+        }
+        if(s.equals("Na")){
+            for (int i = 0; i <numParticles; i++) {
+                Particle tempParticle = new Na(Math.random() * width, Math.random() * height);
+                //particles.add(tempParticle);
+                naList.add(tempParticle);
+                bins.add(tempParticle);
+            }
+        }
+        if(s.equals("C6H8O7")){
+            for (int i = 0; i <numParticles; i++) {
+                Particle tempParticle = new C6H8O7(Math.random() * width, Math.random() * height);
+                //particles.add(tempParticle);
+                c6h8o7List.add(tempParticle);
+                bins.add(tempParticle);
+            }
         }
     }
 
@@ -173,21 +233,21 @@ public class Engine extends JPanel {
 
 
     public void draw(Graphics g) {
-//        for (Particle p : nahco3List) {
-//            p.display(g);
-//        }
+        for (Particle p : nahco3List) {
+            p.display(g);
+        }
         for (Particle p : hclList) {
             p.display(g);
         }
         for (Particle p : hList) {
             p.display(g);
         }
-//        for (Particle p : clList) {
-//            p.display(g);
-//        }
-//        for (Particle p : naList) {
-//            p.display(g);
-//        }
+        for (Particle p : clList) {
+            p.display(g);
+        }
+        for (Particle p : naList) {
+            p.display(g);
+        }
         for (Particle p : hco3List) {
             p.display(g);
         }

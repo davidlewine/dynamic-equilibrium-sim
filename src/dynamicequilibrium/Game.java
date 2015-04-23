@@ -10,6 +10,7 @@ package dynamicequilibrium;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.event.MouseInputAdapter;
 
 
 public class Game extends JFrame implements WindowListener
@@ -30,6 +31,7 @@ public class Game extends JFrame implements WindowListener
   private JTextField clData;  // displays number of H ions
   public Engine engine;
   public Gui gui;
+  public boolean paused = false;
 
 
   public Game(int period)
@@ -105,10 +107,14 @@ public class Game extends JFrame implements WindowListener
 //  {  jtfBox.setText("Boxes used: " + no);  }
   
   public void guiUpdate(){
+      if(gui != null){
       gui.update();
+      }
   }
   public void guiRender(){
+      if(gui != null){
       gui.render();
+      }
   }
 
   public void setTimeSpent(long t)
@@ -138,23 +144,54 @@ public class Game extends JFrame implements WindowListener
    public void setna(int n)
   {  naData.setText("Na: " + n); }
   
-
+ public void pause(){
+     if(paused){
+         paused = false;
+         gp.resumeGame();
+         System.out.println("resume");
+     }
+     else{
+         paused = true;
+         gp.pauseGame();
+         System.out.println("pause");
+     }
+ }
+ 
+ public void addParticles(){
+     String formula = JOptionPane.showInputDialog(this, "enter particle formula");
+     int numParticles = Integer.parseInt(JOptionPane.showInputDialog(this, "enter number of particles"));
+     engine.addParticles(formula, numParticles);
+ }
+ 
+ public void setFrameRate(){
+     int newPeriod = Integer.parseInt(JOptionPane.showInputDialog(this, "set frame rate")); 
+     gp.setPeriod(newPeriod);
+     //System.out.println("period: " + gp.getPeriod());
+ }
   
 
   // ----------------- window listener methods -------------
 
   public void windowActivated(WindowEvent e) 
-  { gp.resumeGame();  }
+  { 
+      //gp.resumeGame();
+  }
 
   public void windowDeactivated(WindowEvent e) 
-  {  gp.pauseGame();  }
+  {  
+    //gp.pauseGame();    
+  }
 
 
   public void windowDeiconified(WindowEvent e) 
-  {  gp.resumeGame();  }
+  {  
+      //gp.resumeGame();  
+  }
 
   public void windowIconified(WindowEvent e) 
-  {  gp.pauseGame(); }
+  {  
+      //gp.pauseGame(); 
+  }
 
 
   public void windowClosing(WindowEvent e)
@@ -176,5 +213,5 @@ public class Game extends JFrame implements WindowListener
 
     new Game(period);    // ms
   }
-
+  
 } // end of WormChase class

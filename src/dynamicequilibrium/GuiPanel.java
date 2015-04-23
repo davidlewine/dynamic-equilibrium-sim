@@ -5,30 +5,22 @@
  */
 package dynamicequilibrium;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.text.DecimalFormat;
-import javax.swing.JPanel;
+import java.awt.*;
+
+import java.awt.event.*;
+
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 
 /**
  *
  * @author David
  */
-public class GuiPanel extends JPanel{
+public class GuiPanel extends JPanel {
 
     private static final int PWIDTH = 600;   // size of panel
     private static final int PHEIGHT = 600;
 
-    
     private int period;                // period between drawing in _ms_
 
     private Gui gui;
@@ -37,8 +29,6 @@ public class GuiPanel extends JPanel{
     boolean running = true;
 
     // used at game termination
-    
-
     // off screen rendering
     private Graphics dbg;
     private Image img = null;
@@ -49,8 +39,10 @@ public class GuiPanel extends JPanel{
     int x = -1, xOld = -1;
     int hy = 0, h2oy = 5, bhy = 10, hay = 15;
     int hyOld = 0, h2oyOld = 0, bhyOld = 0, hayOld = 0;
+    Button pause, add, frameRate;
 
     public GuiPanel(Gui g, Game gameArg, Engine engineArg, int period) {
+        //ml = new MyListener(); 
         gui = g;
         game = gameArg;
         this.period = period;
@@ -63,21 +55,28 @@ public class GuiPanel extends JPanel{
         readyForTermination();
 
         engine = engineArg;
-        if(engine == null) System.out.println("null");
+        if (engine == null) {
+            System.out.println("null");
+        }
 
-//        addMouseListener(new MouseAdapter() {
-//            public void mousePressed(MouseEvent e) {
-//
-//            }
-//        });
+        pause = new Button("pause", 50, 10, 10, Color.DARK_GRAY);
+        add = new Button("add particles", 100, 10, 10, Color.CYAN);
+        //frameRate = new Button("frame rate", 150, 10, 10, Color.PINK);
+
+        addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                //System.out.println("gui pressed");
+                checkButtons(e);
+
+            }
+        });
 
         // set up message font
-        
     }  // end of guiPanel()
 
     private void readyForTermination() {
         addKeyListener(new KeyAdapter() {
-	// listen for esc, q, end, ctrl-c on the canvas to
+            // listen for esc, q, end, ctrl-c on the canvas to
             // allow a convenient exit from the full screen configuration
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
@@ -95,24 +94,37 @@ public class GuiPanel extends JPanel{
         super.addNotify();   // creates the peer
     }
 
-
-
-    public void guiUpdate(){
+    public void guiUpdate() {
+        int p = 2;
         hyOld = hy;
         hayOld = hay;
         bhyOld = bhy;
         h2oyOld = h2oy;
         xOld = x;
         x++;
-        
+
         //System.out.println("engine");
-        hy = engine.hList.size();
-        h2oy = engine.h2oList.size();
-        bhy = engine.hclList.size() + engine.nahco3List.size();
-        hay = engine.hco3List.size();  
+        hy = engine.hList.size() / p;
+        h2oy = engine.h2oList.size() / p;
+        bhy = engine.hclList.size() / p;
+        hay = engine.hco3List.size() / p + engine.hco3List.size() / p;
     }
-    
-    public void guiRender(){
+
+    public void checkButtons(MouseEvent e) {
+        if (pause.pressed(e.getX(), e.getY())) {
+            game.pause();
+        }
+
+        if (add.pressed(e.getX(), e.getY())) {
+            game.addParticles();
+        }
+
+//        if (frameRate.pressed(e.getX(), e.getY())){
+//            game.setFrameRate();
+//        }
+    }
+
+    public void guiRender() {
         if (img == null) {
             img = createImage(PWIDTH, PHEIGHT);
             if (img == null) {
@@ -121,17 +133,20 @@ public class GuiPanel extends JPanel{
             } else {
                 dbg = img.getGraphics();
                 dbg.setColor(Color.white);
-                dbg.fillRect(0, 0, PWIDTH, PHEIGHT); 
+                dbg.fillRect(0, 0, PWIDTH, PHEIGHT);
             }
         }
-        if(x == PWIDTH){
-           // clear the background and reset x
+        if (x == PWIDTH) {
+            // clear the background and reset x
             dbg.setColor(Color.white);
-            dbg.fillRect(0, 0, PWIDTH, PHEIGHT); 
-            x = -1; 
-        }
-        else{
-            
+            dbg.fillRect(0, 0, PWIDTH, PHEIGHT);
+            x = -1;
+            //Draw buttons
+            pause.drawButton(dbg);
+            add.drawButton(dbg);
+            //frameRate.drawButton(dbg);
+        } else {
+
             //draw new lineSegments
             dbg.setColor(hColor);
             dbg.drawLine(xOld, PHEIGHT - hyOld, x, PHEIGHT - hy);
@@ -141,8 +156,12 @@ public class GuiPanel extends JPanel{
             dbg.drawLine(xOld, PHEIGHT - bhyOld, x, PHEIGHT - bhy);
             dbg.setColor(haColor);
             dbg.drawLine(xOld, PHEIGHT - hayOld, x, PHEIGHT - hay);
-           
+            //pause.drawButton(dbg);
+            //add.drawButton(dbg);
+            //frameRate.drawButton(dbg);
+
         }
+
     }
 
     public void paintScreen() // use active rendering to put the buffered image on-screen
@@ -160,7 +179,5 @@ public class GuiPanel extends JPanel{
         }
     } // end of paintScreen()
 
-    
-    
 }  // end of WormPanel class
 
