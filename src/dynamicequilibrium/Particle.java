@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -43,9 +43,13 @@ public class Particle{
         pos = pos.plus(vel);
     }
     
-    public ArrayList<Particle> react(Particle p){
+    public Hashtable<String, ArrayList<Particle>> react(Particle p){
         ArrayList<Particle> products = new ArrayList();
-        return products;
+        ArrayList<Particle> destroyed = new ArrayList();
+        Hashtable<String, ArrayList<Particle>> results = new Hashtable(5);
+        results.put("produced", products);
+        results.put("destroyed", destroyed);
+        return results;
     }
     public ArrayList<Particle> react(){
         ArrayList<Particle> products = new ArrayList();

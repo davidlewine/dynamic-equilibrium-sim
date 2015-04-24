@@ -108,6 +108,7 @@ public class GuiPanel extends JPanel {
         h2oy = engine.h2oList.size() / p;
         bhy = engine.hclList.size() / p;
         hay = engine.hco3List.size() / p + engine.hco3List.size() / p;
+        gui.setHRate(engine.hRate);
     }
 
     public void checkButtons(MouseEvent e) {

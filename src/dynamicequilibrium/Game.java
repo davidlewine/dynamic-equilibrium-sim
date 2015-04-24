@@ -26,6 +26,9 @@ public class Game extends JFrame implements WindowListener
   private JTextField hclData;  // displays number of H ions
   private JTextField nahco3Data;  // displays number of H ions
   private JTextField c6h8o7Data;  // displays number of H ions
+  private JTextField c6h7o7Data;  // displays number of H ions
+  private JTextField c6h6o7Data;  // displays number of H ions
+  private JTextField c6h5o7Data;  // displays number of H ions
   private JTextField h2oData;  // displays number of H ions
   private JTextField naData;  // displays number of H ions
   private JTextField clData;  // displays number of H ions
@@ -89,6 +92,18 @@ public class Game extends JFrame implements WindowListener
     c6h8o7Data.setEditable(false);
     ctrls.add(c6h8o7Data);
     
+    c6h7o7Data = new JTextField("C6H7O7: 0 ");
+    c6h7o7Data.setEditable(false);
+    ctrls.add(c6h7o7Data);
+    
+    c6h6o7Data = new JTextField("C6H6O7: 0 ");
+    c6h6o7Data.setEditable(false);
+    ctrls.add(c6h6o7Data);
+    
+    c6h5o7Data = new JTextField("C6H5O7: 0 ");
+    c6h5o7Data.setEditable(false);
+    ctrls.add(c6h5o7Data);
+    
     h2oData = new JTextField("H2O: 0 ");
     h2oData.setEditable(false);
     ctrls.add(h2oData);
@@ -99,7 +114,7 @@ public class Game extends JFrame implements WindowListener
     
     
 
-    c.add(ctrls, "South");
+    c.add(ctrls, "North");
   }  // end of makeGUI()
 
 
@@ -138,6 +153,15 @@ public class Game extends JFrame implements WindowListener
   public void setc6h8o7(int n)
   {  c6h8o7Data.setText("C6H8O7: " + n); }
   
+  public void setc6h7o7(int n)
+  {  c6h7o7Data.setText("C6H7O7: " + n); }
+  
+  public void setc6h6o7(int n)
+  {  c6h6o7Data.setText("C6H6O7: " + n); }
+  
+  public void setc6h5o7(int n)
+  {  c6h5o7Data.setText("C6H5O7: " + n); }
+  
   public void seth2o(int n)
   {  h2oData.setText("H2O: " + n); }
   
@@ -158,9 +182,12 @@ public class Game extends JFrame implements WindowListener
  }
  
  public void addParticles(){
+     pause();//pause to avoid concurrent modification depending on what is happening--
+            //engine could be modifying particle lists in reaction method.
      String formula = JOptionPane.showInputDialog(this, "enter particle formula");
      int numParticles = Integer.parseInt(JOptionPane.showInputDialog(this, "enter number of particles"));
      engine.addParticles(formula, numParticles);
+     pause();//unpause
  }
  
  public void setFrameRate(){

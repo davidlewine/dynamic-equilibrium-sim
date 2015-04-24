@@ -22,7 +22,7 @@ public class Gui extends JFrame implements WindowListener {
 
   private GuiPanel gp;        // where the worm is drawn
   
-  private JTextField hData;  // displays number of H ions
+  private JTextField hRate;  // displays number of H ions
   private JTextField hco3Data;  // displays number of H ions
   private JTextField hclData;  // displays number of H ions
   private JTextField nahco3Data;  // displays number of H ions
@@ -57,6 +57,9 @@ public class Gui extends JFrame implements WindowListener {
     JPanel ctrls = new JPanel();   // a row of textfields
     ctrls.setLayout( new BoxLayout(ctrls, BoxLayout.X_AXIS));
     
+    hRate = new JTextField("H + cl = HCl: 0");
+    hRate.setEditable(false);
+    ctrls.add(hRate);
     
 
     c.add(ctrls, "South");
@@ -70,6 +73,9 @@ public class Gui extends JFrame implements WindowListener {
      gp.guiRender();
      gp.paintScreen();
  }
+ 
+ public void setHRate(double n)
+  {  hRate.setText("H + Cl = HCl: " + n); }
   
 
   // ----------------- window listener methods -------------
