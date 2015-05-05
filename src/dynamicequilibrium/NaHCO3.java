@@ -9,7 +9,7 @@ import java.util.Hashtable;
  * @author David
  */
 public class NaHCO3 extends Particle{
-    
+    public static double pDecomp = .01;
     public NaHCO3(double x, double y){
         super(x, y, 20, new Color(0, 0, 200), "NaHCO3");
     }
@@ -27,7 +27,7 @@ public class NaHCO3 extends Particle{
         ArrayList<Particle> products = new ArrayList();
         ArrayList<Particle> destroyed = new ArrayList();
         Hashtable<String, ArrayList<Particle>> results = new Hashtable(5);
-            if (Math.random() > .990) {
+            if (Math.random() < pDecomp) {
                 products.add(new Na(pos.x(), Math.max(pos.y() - 1*r, 0)));
                 products.add(new HCO3(Math.max(pos.x() - 1 * r, 0), pos.y()));
                 destroyed.add(this);

@@ -33,7 +33,9 @@ public class Engine extends JPanel {
     ArrayList<Particle> c6h6o7List = new ArrayList();
     ArrayList<Particle> c6h7o7List = new ArrayList();
     Hashtable<String, ArrayList<Particle>> particleLists = new Hashtable(20);
-    int width, height;
+    Hashtable<String, Double> reactionProbs = new Hashtable(20);
+    Hashtable<String, Integer> reactionRates = new Hashtable(20);
+    double width, height;
     double atomRad;
     double hCountOld = 0, hRate = 0;
     long rateTimer = 3, startTime = 0;
@@ -54,6 +56,22 @@ public class Engine extends JPanel {
         particleLists.put("Na", naList);
         particleLists.put("Cl", clList);
         particleLists.put("H", hList);
+        
+        reactionProbs.put("HCl", .999);
+        reactionProbs.put("HClH", .988);
+        reactionProbs.put("HClCl", .988);
+        
+        reactionRates.put("H", 0);
+        reactionRates.put("C6H5O7", 0);
+        reactionRates.put("C6H6O7", 0);
+        reactionRates.put("C6H7O7", 0);
+        reactionRates.put("C6H8O7", 0);
+        reactionRates.put("NaHCO3", 0);
+        reactionRates.put("Na", 0);
+        reactionRates.put("HCO3", 0);
+        reactionRates.put("Cl", 0);
+        reactionRates.put("HCl", 0);
+        
 
         for (int i = 0; i < 0; i++) {
             Particle tempParticle = new HCl(Math.random() * width, Math.random() * height);
@@ -147,17 +165,31 @@ public class Engine extends JPanel {
     public void update() {
         moveParticles();
         reactParticles();
-        updateRates();
+        //updateRates();
     }
 
     public void updateRates() {
         long currentTime = System.currentTimeMillis();
         if (currentTime >= startTime + rateTimer * 1000) {
-            hRate = 1000 * (hList.size() - hCountOld) / (currentTime - startTime);
-            hCountOld = hList.size();
-            startTime = currentTime;
+            //reset rates
+            //System.out.println("reset rates");
+             Enumeration e = reactionRates.keys();
+                while(e.hasMoreElements()){
+                    reactionRates.put((String)e.nextElement(), 0);
+                }
+                startTime = currentTime;
         }
     }
+    
+    public void resetRates() {
+       
+             Enumeration e = reactionRates.keys();
+                while(e.hasMoreElements()){
+                    reactionRates.put((String)e.nextElement(), 0);
+                }
+
+        }
+    
 
     public void moveParticles() {
         for (Enumeration e = particleLists.keys(); e.hasMoreElements();) {
@@ -197,6 +229,14 @@ public class Engine extends JPanel {
 
         }
     }
+    
+    public void clearParticles(){
+        for (Enumeration e = particleLists.keys(); e.hasMoreElements();) {
+            ArrayList<Particle> list = particleLists.get(e.nextElement());
+            list.clear();
+            resetRates();
+        }
+    }
 
     public void reactParticles() {
         //to do: search for neighbors and react with first neighbor.
@@ -225,6 +265,8 @@ public class Engine extends JPanel {
                                 bins.add(p);
                                 //System.out.println("part: " + particle + " neighbor: " + neighbor + " prod: " + p);
                             }
+                            //increment reaction rate
+                            reactionRates.put(particle.formula, reactionRates.get(particle.formula)+1);
                         }
 //                            for(Particle p : destroyed){
 //                                bins.remove(p);
@@ -249,6 +291,12 @@ public class Engine extends JPanel {
 
         }
 
+    }
+    public double reactionProb(String ra, String rb){
+        double prob;
+        double probCollision = 1 - Math.pow(Math.pow(((width*height - 225.0)/(width*height)), particleLists.get(rb).size()),particleLists.get(ra).size());
+        //System.out.println("p(" + ra + "+" + rb +"): " + probCollision);
+        return probCollision*(1-reactionProbs.get(ra+rb));
     }
 
     public void draw(Graphics g) {

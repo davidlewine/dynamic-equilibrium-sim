@@ -8,6 +8,7 @@ package dynamicequilibrium;
 import java.awt.*;
 
 import java.awt.event.*;
+import java.util.Enumeration;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -34,12 +35,15 @@ public class GuiPanel extends JPanel {
     private Image img = null;
     Color hColor = new Color(255, 0, 0);
     Color h2oColor = new Color(0, 0, 255);
-    Color bhColor = new Color(255, 0, 255);
-    Color haColor = new Color(255, 255, 0);
+    Color hco3Color = new Color(255, 0, 255);
+    Color clColor = new Color(0, 255, 0);
+    Color c6Color = Color.ORANGE;
     int x = -1, xOld = -1;
-    int hy = 0, h2oy = 5, bhy = 10, hay = 15;
-    int hyOld = 0, h2oyOld = 0, bhyOld = 0, hayOld = 0;
-    Button pause, add, frameRate;
+    int hy = 0, h2oy = 5, hco3y = 10, cly = 15, c6y = 20;
+    int hyOld = 0, h2oyOld = 0, hco3yOld = 0, clyOld = 0, c6yOld = 0;
+    Button pause, add, frameRate, clear;
+    long startTime = 0;
+    int rateInterval = 3;
 
     public GuiPanel(Gui g, Game gameArg, Engine engineArg, int period) {
         //ml = new MyListener(); 
@@ -61,6 +65,7 @@ public class GuiPanel extends JPanel {
 
         pause = new Button("pause", 50, 10, 10, Color.DARK_GRAY);
         add = new Button("add particles", 100, 10, 10, Color.CYAN);
+        clear = new Button("clear particles", 150, 10, 10, Color.GREEN);
         //frameRate = new Button("frame rate", 150, 10, 10, Color.PINK);
 
         addMouseListener(new MouseAdapter() {
@@ -95,10 +100,11 @@ public class GuiPanel extends JPanel {
     }
 
     public void guiUpdate() {
-        int p = 2;
+        int p = 10;
         hyOld = hy;
-        hayOld = hay;
-        bhyOld = bhy;
+        hco3yOld = hco3y;
+        clyOld = cly;
+        c6yOld = c6y;
         h2oyOld = h2oy;
         xOld = x;
         x++;
@@ -106,8 +112,9 @@ public class GuiPanel extends JPanel {
         //System.out.println("engine");
         hy = engine.hList.size() / p;
         h2oy = engine.h2oList.size() / p;
-        bhy = engine.hclList.size() / p;
-        hay = engine.hco3List.size() / p + engine.hco3List.size() / p;
+        hco3y = engine.hco3List.size() / p;
+        cly = engine.hclList.size() / p ;
+        c6y = engine.c6h5o7List.size() / p + engine.c6h6o7List.size() / p + engine.c6h7o7List.size() / p;// + engine.c6h8o7List.size() / p;
         gui.setHRate(engine.hRate);
     }
 
@@ -119,10 +126,41 @@ public class GuiPanel extends JPanel {
         if (add.pressed(e.getX(), e.getY())) {
             game.addParticles();
         }
+        
+        if (clear.pressed(e.getX(), e.getY())) {
+            game.clearParticles();
+        }
 
 //        if (frameRate.pressed(e.getX(), e.getY())){
 //            game.setFrameRate();
 //        }
+    }
+    
+    private void showProbs(Graphics g){
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(290, 20, 200, 50);
+        g.setColor(Color.DARK_GRAY);
+        g.drawString("p(H+Cl = HCl: " + engine.reactionProb("H", "Cl"), 300, 30);
+        g.drawString("p(HCl = H + Cl: " + (engine.reactionProb("HCl", "H") + engine.reactionProb("HCl","Cl")) , 300, 60);
+    }
+    
+    private void showRates(Graphics g){
+        long currentTime = System.currentTimeMillis();
+        if (currentTime >= startTime + rateInterval * 1000) {
+   
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(290, 20, 250, 50);
+        g.setColor(Color.DARK_GRAY);
+        g.drawString("rate H+ absorbed: " + engine.reactionRates.get("H"), 300, 30);
+        g.drawString("rate H+ released: " + (engine.reactionRates.get("HCl")+
+                                            + engine.reactionRates.get("C6H6O7") + engine.reactionRates.get("C6H7O7")
+                                            + engine.reactionRates.get("C6H8O7")) , 300, 60);
+        startTime = currentTime;
+             Enumeration e = engine.reactionRates.keys();
+                while(e.hasMoreElements()){
+                    engine.reactionRates.put((String)e.nextElement(), 0);
+                }
+        }
     }
 
     public void guiRender() {
@@ -146,6 +184,7 @@ public class GuiPanel extends JPanel {
             pause.drawButton(dbg);
             add.drawButton(dbg);
             //frameRate.drawButton(dbg);
+            showRates(dbg);
         } else {
 
             //draw new lineSegments
@@ -153,13 +192,19 @@ public class GuiPanel extends JPanel {
             dbg.drawLine(xOld, PHEIGHT - hyOld, x, PHEIGHT - hy);
             dbg.setColor(h2oColor);
             dbg.drawLine(xOld, PHEIGHT - h2oyOld, x, PHEIGHT - h2oy);
-            dbg.setColor(bhColor);
-            dbg.drawLine(xOld, PHEIGHT - bhyOld, x, PHEIGHT - bhy);
-            dbg.setColor(haColor);
-            dbg.drawLine(xOld, PHEIGHT - hayOld, x, PHEIGHT - hay);
+            dbg.setColor(c6Color);
+            dbg.drawLine(xOld, PHEIGHT - c6yOld, x, PHEIGHT - c6y);
+            dbg.setColor(hco3Color);
+            dbg.drawLine(xOld, PHEIGHT - hco3yOld, x, PHEIGHT - hco3y);
+            dbg.setColor(clColor);
+            dbg.drawLine(xOld, PHEIGHT - clyOld, x, PHEIGHT - cly);
+            dbg.setColor(Color.BLACK);
+            dbg.drawLine(xOld, PHEIGHT - (clyOld + hco3yOld + c6yOld), x, PHEIGHT - (cly + hco3y + c6y));
             //pause.drawButton(dbg);
             //add.drawButton(dbg);
             //frameRate.drawButton(dbg);
+            //showProbs(dbg);
+            showRates(dbg);
 
         }
 

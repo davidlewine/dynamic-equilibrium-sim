@@ -19,6 +19,7 @@ public class C6H5O7 extends Particle{
         ArrayList<Particle> destroyed = new ArrayList();
         Hashtable<String, ArrayList<Particle>> results = new Hashtable(5);
         
+        
         results.put("produced", products);
         results.put("destroyed", destroyed);
         return results;

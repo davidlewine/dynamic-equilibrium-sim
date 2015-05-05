@@ -23,7 +23,7 @@ public class Button {
         this.c = c;
         this.r = r;
         buttonLabel = bl;
-        buttonFont = new Font("TimesRoman", Font.PLAIN, 10); 
+        buttonFont = new Font("TimesRoman", Font.PLAIN, 14); 
     }
     
     public void drawButton(Graphics g){

@@ -1,35 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.canvas.*?>
 <?import java.lang.*?>
+<?import java.net.*?>
 <?import java.util.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="dynamicequilibrium.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="dynamicequilibrium.FXMLController">
+    <stylesheets>
+        <URL value="@fxml.css" />
+    </stylesheets>
    <children>
-      <SplitPane dividerPositions="0.7562814070351759" layoutX="206.0" layoutY="193.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.41471571906354515" layoutX="155.0" layoutY="98.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="274.0">
                <children>
-                  <ScrollPane layoutX="164.0" layoutY="49.0" prefHeight="298.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <SplitPane dividerPositions="0.553030303030303" layoutX="20.0" layoutY="80.0" orientation="VERTICAL" prefHeight="398.0" prefWidth="199.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <TableView fx:id="dataTable" layoutX="-1.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <columns>
+                                  <TableColumn prefWidth="75.0" text="C2" />
+                                  <TableColumn prefWidth="75.0" text="C1" />
+                                </columns>
+                              </TableView>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="197.0">
+                           <children>
+                              <GridPane layoutX="-2.0" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.0" minWidth="10.0" prefWidth="82.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="128.0" minWidth="10.0" prefWidth="118.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <TextField fx:id="addHTextBox" layoutX="72.0" layoutY="14.0" onAction="#addH" GridPane.columnIndex="1" />
+                                    <Label layoutX="1.0" layoutY="68.0" prefHeight="17.0" prefWidth="84.0" text="add NaHCO3" GridPane.rowIndex="2">
+                                       <GridPane.margin>
+                                          <Insets />
+                                       </GridPane.margin>
+                                    </Label>
+                                    <Label layoutX="14.0" layoutY="43.0" prefHeight="17.0" prefWidth="64.0" text="add HCl " AnchorPane.rightAnchor="161.0" GridPane.rowIndex="1" />
+                                    <Label fx:id="addH" layoutX="2.0" layoutY="18.0" prefHeight="17.0" prefWidth="98.0" text="add H" />
+                                    <Label layoutX="2.0" layoutY="118.0" prefHeight="17.0" prefWidth="67.0" text="add HCO3" GridPane.rowIndex="4" />
+                                    <TextField fx:id="addHClTextBox" layoutX="72.0" layoutY="39.0" onAction="#addHCl" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <Label layoutX="-2.0" layoutY="93.0" prefHeight="17.0" prefWidth="84.0" text="add C6H5O7" GridPane.rowIndex="3" />
+                                    <Label text="add C6H8O7" GridPane.rowIndex="5" />
+                                    <TextField fx:id="addNaHCO3TextBox" onAction="#addNaHCO3" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="addC6H5O7TextBox" onAction="#addC6H5O7" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="addHCO3TextBox" onAction="#addHCO3" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <TextField fx:id="addC6H8O7TextBox" onAction="#addC6H8O7" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                 </children>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TextField layoutX="113.0" layoutY="14.0" prefHeight="25.0" prefWidth="94.0" />
-                  <Label layoutX="36.0" layoutY="18.0" text="add HCl" />
-                  <Label layoutX="36.0" layoutY="47.0" text="add NaHCO3" />
-                  <TextField layoutX="113.0" layoutY="43.0" prefHeight="25.0" prefWidth="94.0" />
-                  <TextField layoutX="420.0" layoutY="14.0" prefHeight="25.0" prefWidth="124.0" />
-                  <TextField layoutX="420.0" layoutY="43.0" prefHeight="25.0" prefWidth="124.0" />
-                  <Label layoutX="299.0" layoutY="18.0" prefHeight="17.0" prefWidth="94.0" text="NaHCO3 decomp">
-                     <tooltip>
-                        <Tooltip text="sets probability that decomposition will occur." />
-                     </tooltip>
-                  </Label>
-                  <Label layoutX="299.0" layoutY="47.0" text="HCl decomp" />
+                  <SplitPane dividerPositions="0.7550505050505051" layoutX="117.0" layoutY="-2.0" orientation="VERTICAL" prefHeight="400.0" prefWidth="393.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-2.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <Canvas fx:id="particleCanvas" height="500.0" layoutX="81.0" layoutY="36.0" width="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <ScatterChart fx:id="graph" layoutX="-54.0" layoutY="-171.0" prefHeight="94.0" prefWidth="391.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </ScatterChart>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
                </children>
             </AnchorPane>
         </items>

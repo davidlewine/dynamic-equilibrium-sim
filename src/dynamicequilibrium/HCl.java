@@ -9,7 +9,7 @@ import java.util.Hashtable;
  * @author David
  */
 public class HCl extends Particle{
-    
+    public static double pDecomp = .01;
     public HCl(double x, double y){
         super(x, y, 20, new Color(255, 150, 0), "HCl");
     }
@@ -25,7 +25,7 @@ public class HCl extends Particle{
         ArrayList<Particle> products = new ArrayList();
         ArrayList<Particle> destroyed = new ArrayList();
         Hashtable<String, ArrayList<Particle>> results = new Hashtable(5);
-            if (Math.random() > .988) {
+            if (Math.random() < pDecomp) {
                 products.add(new H(pos.x(), Math.max(pos.y() - 1*r, 0)));
                 products.add(new Cl(Math.max(pos.x() - 1 * r, 0), pos.y()));
                 destroyed.add(this);

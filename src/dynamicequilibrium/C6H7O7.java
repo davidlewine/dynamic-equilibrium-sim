@@ -10,7 +10,7 @@ import java.util.Hashtable;
  * @author David
  */
 public class C6H7O7 extends Particle{
-    
+    public static double pDecomp = .002;
     public C6H7O7(double x, double y){
         super(x, y, 20, new Color(200, 0, 200), "C6H7O7");
     }
@@ -27,7 +27,7 @@ public class C6H7O7 extends Particle{
         ArrayList<Particle> destroyed = new ArrayList();
         Hashtable<String, ArrayList<Particle>> results = new Hashtable(5);
         
-        if (Math.random() > .991) {
+        if (Math.random() < pDecomp) {
             products.add(new H(pos.x(), Math.max(pos.y() - 1 * r, 0)));
             products.add(new C6H6O7(Math.max(pos.x() - 1 * r, 0), pos.y()));
             destroyed.add(this);

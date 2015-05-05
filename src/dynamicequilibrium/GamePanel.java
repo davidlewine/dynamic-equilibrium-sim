@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.*;
 
 // import com.sun.j3d.utils.timer.J3DTimer;
 public class GamePanel extends JPanel implements Runnable {
@@ -244,6 +245,7 @@ public class GamePanel extends JPanel implements Runnable {
                 dbg = dbImage.getGraphics();
             }
         }
+        
 
         // clear the background
         dbg.setColor(Color.white);
@@ -313,6 +315,8 @@ public class GamePanel extends JPanel implements Runnable {
         statsInterval += period;
 
         if (statsInterval >= MAX_STATS_INTERVAL) {// record stats every MAX_STATS_INTERVAL
+            
+      
             long timeNow = System.currentTimeMillis();
             timeSpentInGame = ((timeNow - gameStartTime) / 1000L);  // ms --> secs
             game.setTimeSpent(timeSpentInGame);
