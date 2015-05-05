@@ -129,7 +129,7 @@ public class GamePanel extends JPanel implements Runnable {
             animator = new Thread(this);
             animator.start();
         }
-        game.gui = new Gui(game, engine, period);
+
     } // end of startGame()
 
   // ------------- game life cycle methods ------------
@@ -220,18 +220,7 @@ public class GamePanel extends JPanel implements Runnable {
         if (!isPaused && !gameOver) {
             engine.update();
         }
-        game.seth(engine.hList.size());
-        game.sethcl(engine.hclList.size());
-        game.sethco3(engine.hco3List.size());
-        game.setnahco3(engine.nahco3List.size());
-        game.setc6h8o7(engine.c6h8o7List.size());
-        game.setc6h7o7(engine.c6h7o7List.size());
-        game.setc6h6o7(engine.c6h6o7List.size());
-        game.setc6h5o7(engine.c6h5o7List.size());
-        game.seth2o(engine.h2oList.size());
-        game.setna(engine.naList.size());
-        game.setcl(engine.clList.size());
-        game.guiUpdate();
+        
 
     }  // end of gameUpdate()
 
@@ -263,7 +252,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     // draw game elements: the obstacles and the worm
         engine.draw(dbg);
-        game.guiRender();
+        //game.guiRender();
 
         if (gameOver) {
             gameOverMessage(dbg);
@@ -319,7 +308,7 @@ public class GamePanel extends JPanel implements Runnable {
       
             long timeNow = System.currentTimeMillis();
             timeSpentInGame = ((timeNow - gameStartTime) / 1000L);  // ms --> secs
-            game.setTimeSpent(timeSpentInGame);
+            //game.setTimeSpent(timeSpentInGame);
 
             long realElapsedTime = timeNow - prevStatsTime;   // time since last stats collection
             totalElapsedTime += realElapsedTime;

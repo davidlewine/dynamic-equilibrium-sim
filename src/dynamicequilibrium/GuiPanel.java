@@ -63,18 +63,9 @@ public class GuiPanel extends JPanel {
             System.out.println("null");
         }
 
-        pause = new Button("pause", 50, 10, 10, Color.DARK_GRAY);
-        add = new Button("add particles", 100, 10, 10, Color.CYAN);
-        clear = new Button("clear particles", 150, 10, 10, Color.GREEN);
-        //frameRate = new Button("frame rate", 150, 10, 10, Color.PINK);
+       
 
-        addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                //System.out.println("gui pressed");
-                checkButtons(e);
-
-            }
-        });
+       
 
         // set up message font
     }  // end of guiPanel()
@@ -118,23 +109,6 @@ public class GuiPanel extends JPanel {
         gui.setHRate(engine.hRate);
     }
 
-    public void checkButtons(MouseEvent e) {
-        if (pause.pressed(e.getX(), e.getY())) {
-            game.pause();
-        }
-
-        if (add.pressed(e.getX(), e.getY())) {
-            game.addParticles();
-        }
-        
-        if (clear.pressed(e.getX(), e.getY())) {
-            game.clearParticles();
-        }
-
-//        if (frameRate.pressed(e.getX(), e.getY())){
-//            game.setFrameRate();
-//        }
-    }
     
     private void showProbs(Graphics g){
         g.setColor(Color.LIGHT_GRAY);
