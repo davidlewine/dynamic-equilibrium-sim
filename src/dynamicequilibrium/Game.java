@@ -181,6 +181,13 @@ public class Game extends JFrame implements WindowListener
      }
  }
  
+ public void clearParticles(){
+     pause();//pause to avoid concurrent modification depending on what is happening--
+            //engine could be modifying particle lists in reaction method.
+     engine.clearParticles();
+     pause();//unpause
+ }
+ 
  public void addParticles(){
      pause();//pause to avoid concurrent modification depending on what is happening--
             //engine could be modifying particle lists in reaction method.
