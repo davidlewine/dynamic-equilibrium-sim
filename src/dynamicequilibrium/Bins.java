@@ -10,12 +10,13 @@ package dynamicequilibrium;
  * @author David
  */
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Bins {
-    int dim = 5;
-    ArrayList<Particle>[][] bins;
-    int width;
-    int height;
+    private int dim = 5;
+    private ArrayList<Particle>[][] bins;
+    private int width;
+    private int height;
     
     
     public Bins(int w, int h){
@@ -29,8 +30,24 @@ public class Bins {
                 bins[i][j] = new ArrayList<Particle>();
             }
         }
-        
-
+    }
+    
+    public void clear(){
+        for(ArrayList[] row: bins){
+            for(ArrayList bin: row){
+                Iterator iter = bin.iterator();
+                while(iter.hasNext()){
+                    Particle p = (Particle)iter.next();
+                    if(!p.formula.equals("BackgroundH2O")){
+                        iter.remove();
+                    }
+                }
+            }
+        }
+    }
+    
+    public int getDim(){
+        return dim;
     }
     
     public void remove(Particle p){

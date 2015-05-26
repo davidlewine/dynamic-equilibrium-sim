@@ -9,11 +9,10 @@ package dynamicequilibrium;
  *
  * @author David
  */
-import java.awt.Color;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.util.*;
-import javax.swing.JFrame;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javax.swing.JPanel;
 
 import math.geom2d.*;
@@ -32,9 +31,13 @@ public class Engine extends JPanel {
     ArrayList<Particle> c6h5o7List = new ArrayList();
     ArrayList<Particle> c6h6o7List = new ArrayList();
     ArrayList<Particle> c6h7o7List = new ArrayList();
+    ArrayList<Particle> co2List = new ArrayList();
     Hashtable<String, ArrayList<Particle>> particleLists = new Hashtable(20);
     Hashtable<String, Double> reactionProbs = new Hashtable(20);
     Hashtable<String, Integer> reactionRates = new Hashtable(20);
+    Hashtable<String, SimpleStringProperty> substanceTotals = new Hashtable(20);
+    Hashtable<String, SimpleStringProperty> substanceCounts = new Hashtable(20);
+    
     double width, height;
     double atomRad;
     double hCountOld = 0, hRate = 0;
@@ -45,6 +48,7 @@ public class Engine extends JPanel {
         width = w;
         height = h;
         bins = new Bins(w, h);
+        
         particleLists.put("HCl", hclList);
         particleLists.put("NaHCO3", nahco3List);
         particleLists.put("H2O", h2oList);
@@ -56,6 +60,33 @@ public class Engine extends JPanel {
         particleLists.put("Na", naList);
         particleLists.put("Cl", clList);
         particleLists.put("H", hList);
+        particleLists.put("CO2", co2List);
+        
+            substanceTotals.put("HCl", new SimpleStringProperty("0"));
+        substanceTotals.put("NaHCO3", new SimpleStringProperty("0"));
+        substanceTotals.put("H2O", new SimpleStringProperty("0"));
+        substanceTotals.put("HCO3", new SimpleStringProperty("0"));
+        substanceTotals.put("C6H8O7", new SimpleStringProperty("0"));
+        substanceTotals.put("C6H7O7", new SimpleStringProperty("0"));
+        substanceTotals.put("C6H6O7", new SimpleStringProperty("0"));
+        substanceTotals.put("C6H5O7", new SimpleStringProperty("0"));
+        substanceTotals.put("Na", new SimpleStringProperty("0"));
+        substanceTotals.put("Cl", new SimpleStringProperty("0"));
+        substanceTotals.put("H", new SimpleStringProperty("0"));
+        substanceTotals.put("CO2", new SimpleStringProperty("0"));
+        
+        substanceCounts.put("HCl", new SimpleStringProperty("0"));
+        substanceCounts.put("NaHCO3", new SimpleStringProperty("0"));
+        substanceCounts.put("H2O", new SimpleStringProperty("0"));
+        substanceCounts.put("HCO3", new SimpleStringProperty("0"));
+        substanceCounts.put("C6H8O7", new SimpleStringProperty("0"));
+        substanceCounts.put("C6H7O7", new SimpleStringProperty("0"));
+        substanceCounts.put("C6H6O7", new SimpleStringProperty("0"));
+        substanceCounts.put("C6H5O7", new SimpleStringProperty("0"));
+        substanceCounts.put("Na", new SimpleStringProperty("0"));
+        substanceCounts.put("Cl", new SimpleStringProperty("0"));
+        substanceCounts.put("H", new SimpleStringProperty("0"));
+        substanceCounts.put("CO2", new SimpleStringProperty("0"));
         
         reactionProbs.put("HCl", .999);
         reactionProbs.put("HClH", .988);
@@ -72,6 +103,13 @@ public class Engine extends JPanel {
         reactionRates.put("Cl", 0);
         reactionRates.put("HCl", 0);
         
+        //add one BackgroundH20 object to each bin.  That object won't move or be displayed or be destroyed, but will 
+        // be available for particles that might decompose upon collision with water. 
+        for(int i = 0; i < w; i+= bins.getDim()){
+            for(int j = 0; j < h; j+= bins.getDim()){
+                bins.add(new BackgroundH2O(i,j));
+            }
+        }
 
         for (int i = 0; i < 0; i++) {
             Particle tempParticle = new HCl(Math.random() * width, Math.random() * height);
@@ -95,7 +133,11 @@ public class Engine extends JPanel {
 
     public void addParticles(String s, int numPs) {
         int numParticles = numPs;
+        int currentNum = Integer.parseInt(substanceTotals.get(s).getValue());
+        substanceTotals.get(s).set("" + (numParticles + currentNum));
+        
         if (s.equals("HCl")) {
+            
             for (int i = 0; i < numParticles; i++) {
                 Particle tempParticle = new HCl(Math.random() * width, Math.random() * height);
                 //particles.add(tempParticle);
@@ -165,7 +207,17 @@ public class Engine extends JPanel {
     public void update() {
         moveParticles();
         reactParticles();
+        //updateSubstanceCounts();
         //updateRates();
+    }
+    
+    public void updateSubstanceCounts(){
+        Enumeration e = particleLists.keys();
+        while(e.hasMoreElements()){
+            String nextKey = (String)e.nextElement();
+            substanceCounts.get(nextKey).set("" + particleLists.get(nextKey).size());
+            //System.out.println(nextKey + ": " + substanceCounts.get(nextKey));
+        }
     }
 
     public void updateRates() {
@@ -210,23 +262,29 @@ public class Engine extends JPanel {
             particle.move();
 
             if (particle.pos.x() < 0) {
-                particle.vel = new Vector2D(Math.abs(particle.vel.x()), particle.vel.y());
-                particle.pos = new Vector2D(0, particle.pos.y());
-            }
-            if (particle.pos.x() > width) {
-                particle.vel = new Vector2D(-1 * Math.abs(particle.vel.x()), particle.vel.y());
+                //particle.vel = new Vector2D(Math.abs(particle.vel.x()), particle.vel.y());
                 particle.pos = new Vector2D(width, particle.pos.y());
             }
+            if (particle.pos.x() > width) {
+                //particle.vel = new Vector2D(-1 * Math.abs(particle.vel.x()), particle.vel.y());
+                particle.pos = new Vector2D(0, particle.pos.y());
+            }
             if (particle.pos.y() < 0) {
-                particle.vel = new Vector2D(particle.vel.x(), Math.abs(particle.vel.y()));
-                particle.pos = new Vector2D(particle.pos.x(), 0);
+                //particle.vel = new Vector2D(particle.vel.x(), Math.abs(particle.vel.y()));
+                if(!particle.state.equals("gas")){
+                    particle.pos = new Vector2D(particle.pos.x(), height);
+                }
             }
             if (particle.pos.y() > height) {
-                particle.vel = new Vector2D(particle.vel.x(), -1 * Math.abs(particle.vel.y()));
-                particle.pos = new Vector2D(particle.pos.x(), height);
+                //particle.vel = new Vector2D(particle.vel.x(), -1 * Math.abs(particle.vel.y()));
+                particle.pos = new Vector2D(particle.pos.x(), 0);
             }
-            bins.add(particle);
-
+            if(particle.state.equals("gas") && particle.pos.y() < 0){
+                iter.remove();
+            }
+            else{
+                bins.add(particle);
+            }
         }
     }
     
@@ -234,8 +292,14 @@ public class Engine extends JPanel {
         for (Enumeration e = particleLists.keys(); e.hasMoreElements();) {
             ArrayList<Particle> list = particleLists.get(e.nextElement());
             list.clear();
-            resetRates();
+            //resetRates();
         }
+        for (Enumeration e = substanceTotals.keys(); e.hasMoreElements();) {
+            substanceTotals.get(e.nextElement()).setValue("0");
+
+        }
+        bins.clear();
+        
     }
 
     public void reactParticles() {
@@ -261,18 +325,14 @@ public class Engine extends JPanel {
                         if (products.size() > 0) {
                             //System.out.println("part: " + particle + " neighbor: " + neighbor);
                             for (Particle p : products) {
+                                //move particle a bit away from collision site to avoid repeated reactions.
+                                p.pos = p.pos.plus(p.vel.times(2));
                                 particleLists.get(p.formula).add(p);
                                 bins.add(p);
                                 //System.out.println("part: " + particle + " neighbor: " + neighbor + " prod: " + p);
                             }
-                            //increment reaction rate
-                            reactionRates.put(particle.formula, reactionRates.get(particle.formula)+1);
+                           
                         }
-//                            for(Particle p : destroyed){
-//                                bins.remove(p);
-//                                particleLists.get(p.formula).remove(p);
-//                            }
-                        //}
                     }
                 }
 
@@ -318,9 +378,9 @@ public class Engine extends JPanel {
         for (Particle p : hco3List) {
             p.display(g);
         }
-//        for (Particle p : h2oList) {
-//            p.display(g);
-//        }
+        for (Particle p : h2oList) {
+            p.display(g);
+        }
         for (Particle p : c6h8o7List) {
             p.display(g);
         }
@@ -331,6 +391,9 @@ public class Engine extends JPanel {
             p.display(g);
         }
         for (Particle p : c6h5o7List) {
+            p.display(g);
+        }
+        for (Particle p : co2List) {
             p.display(g);
         }
     }

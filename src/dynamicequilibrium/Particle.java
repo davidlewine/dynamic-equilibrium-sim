@@ -22,18 +22,19 @@ public class Particle{
     public Vector2D pos, vel;
     public double r;
     public Color c;
-    public double rate = .5;
+    public double speed = .5;
     public String formula;
     public int charge = 0;
     public int[] bin = {0,0};
     public Font particleFont;
+    public String state = "aqueous";
 
     
     public Particle(double x, double y, double rr, Color cc, String f){
         pos = new Vector2D(x, y);
         r = rr;
         c = cc;
-        vel = new Vector2D(Math.random()/rate - .5/rate, Math.random()/rate - .5/rate);
+        vel = new Vector2D(4*Math.random()*speed - 2*speed, 4*Math.random()*speed - 2*speed);
         formula = f;
         particleFont = new Font("TimesRoman", Font.PLAIN, 10); 
     }

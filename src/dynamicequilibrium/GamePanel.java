@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.util.*;
+import javafx.application.Platform;
 
 // import com.sun.j3d.utils.timer.J3DTimer;
 public class GamePanel extends JPanel implements Runnable {
@@ -123,7 +123,7 @@ public class GamePanel extends JPanel implements Runnable {
         startGame();    // start the thread
     }
 
-    private void startGame() // initialise and start the thread 
+    public void startGame() // initialise and start the thread 
     {
         if (animator == null || !running) {
             animator = new Thread(this);
@@ -152,7 +152,7 @@ public class GamePanel extends JPanel implements Runnable {
   
 
     public void run() /* The frames of the animation are drawn inside the while loop. */ {
-        long beforeTime, afterTime, timeDiff, sleepTime;
+        long beforeTime, afterTime, timeDiff, sleepTime, guiTimeDiff, guiBeforeTime;
         int overSleepTime = 0;
         int noDelays = 0;
         int excess = 0;
@@ -161,6 +161,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameStartTime = System.currentTimeMillis();
         prevStatsTime = gameStartTime;
         beforeTime = gameStartTime;
+        guiBeforeTime = gameStartTime;
 
         running = true;
 
@@ -178,6 +179,16 @@ public class GamePanel extends JPanel implements Runnable {
 
             afterTime = System.currentTimeMillis();
             timeDiff = afterTime - beforeTime;
+            guiTimeDiff = afterTime - guiBeforeTime;
+            if(guiTimeDiff > 500){
+                guiBeforeTime = afterTime;
+                Platform.runLater(new Runnable() {
+                @Override public void run() {
+                    engine.updateSubstanceCounts();
+                }
+            });
+            }
+            
             sleepTime = (period - timeDiff) - overSleepTime;
 
             if (sleepTime > 0) {   // some time left in this cycle

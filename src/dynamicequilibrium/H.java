@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 public class H extends Particle{
     
-    public static double pcl = .001;
-    public static double phco3 = .012;
-    public static double pc6 = .01;
+    public static double pHandCl = .001;
+    public static double pHandC6HxO7 = .01;
+    public static double pHandHCO3 = .01;
    
     
     
@@ -30,35 +30,36 @@ public class H extends Particle{
         ArrayList<Particle> destroyed = new ArrayList();
         Hashtable<String, ArrayList<Particle>> results = new Hashtable(5);
         if(p.formula.equals("Cl")){
-            if (Math.random() > pcl) {
+            if (Math.random() < pHandCl) {
                     products.add(new HCl(pos.x(), pos.y()));
                     destroyed.add(this);
                     destroyed.add(p);
                 }
         }
         if(p.formula.equals("HCO3")){
-            if (Math.random() > phco3) {
+            if (Math.random() < pHandHCO3) {
                     products.add(new H2O(pos.x(), pos.y()));
+                    products .add(new CO2(pos.x(), pos.y()));
                     destroyed.add(this);
                     destroyed.add(p);
                 }
         }
         if(p.formula.equals("C6H7O7")){
-            if (Math.random() > pc6) {
+            if (Math.random() < pHandC6HxO7) {
                     products.add(new C6H8O7(pos.x(), pos.y()));
                     destroyed.add(this);
                     destroyed.add(p);
                 }
         }
         if(p.formula.equals("C6H6O7")){
-            if (Math.random() > pc6) {
+            if (Math.random() < pHandC6HxO7) {
                     products.add(new C6H7O7(pos.x(), pos.y()));
                     destroyed.add(this);
                     destroyed.add(p);
                 }
         }
         if(p.formula.equals("C6H5O7")){
-            if (Math.random() > pc6) {
+            if (Math.random() < pHandC6HxO7) {
                     products.add(new C6H6O7(pos.x(), pos.y()));
                     destroyed.add(this);
                     destroyed.add(p);
